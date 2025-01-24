@@ -8,22 +8,60 @@ const LoginForm: React.FC = () => {
     password: "",
   });
 
+  const [errors, setErrors] = useState({
+    email: "",
+    password: "",
+  });
+
+  const validateEmail = (email: string) => {
+    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    return emailRegex.test(email);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log(formData);
+
+    const validationErrors: { email?: string; password?: string } = {};
+
+
+    if (!formData.email) {
+      validationErrors.email = "Email is required.";
+    } else if (!validateEmail(formData.email)) {
+      validationErrors.email = "Invalid email format.";
+    }
+
+
+    if (!formData.password) {
+      validationErrors.password = "Password is required.";
+    } else if (formData.password.length < 6) {
+      validationErrors.password = "Password must be at least 6 characters.";
+    }
+
+    setErrors(validationErrors);
+
+    if (Object.keys(validationErrors).length === 0) {
+      console.log(formData);
+    }
   };
 
   function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const { name, value } = e.target;
+
     setFormData((formData) => ({
       ...formData,
-      [e.target.name]: e.target.value,
+      [name]: value,
+    }));
+
+    setErrors((errors) => ({
+      ...errors,
+      [name]: "",
     }));
   }
 
   return (
     <form
       onSubmit={handleSubmit}
-      className="h-auto bg-white p-8  w-full mx-auto shadow-xl backdrop-blur-sm dark:bg-[#1E1E1E] bg-gray-100/50 rounded-2xl"
+      className="h-auto bg-white p-8 w-full mx-auto shadow-xl backdrop-blur-sm dark:bg-[#1E1E1E] bg-gray-100/50 rounded-2xl"
     >
       <h2 className="text-3xl font-bold text-gray-800 dark:text-white text-center mb-6">
         Login to Your Account
@@ -43,9 +81,16 @@ const LoginForm: React.FC = () => {
             name="email"
             value={formData.email}
             onChange={handleInputChange}
-            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none bg-white dark:bg-gray-700 dark:text-white"
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none ${
+              errors.email
+                ? "border-red-500 dark:border-red-500"
+                : "border-gray-300 dark:border-gray-600"
+            } bg-white dark:bg-gray-700 dark:text-white`}
             placeholder="Enter your email"
           />
+          {errors.email && (
+            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+          )}
         </div>
 
         {/* Password Field */}
@@ -62,9 +107,16 @@ const LoginForm: React.FC = () => {
             name="password"
             value={formData.password}
             onChange={handleInputChange}
-            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none bg-white dark:bg-gray-700 dark:text-white"
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none ${
+              errors.password
+                ? "border-red-500 dark:border-red-500"
+                : "border-gray-300 dark:border-gray-600"
+            } bg-white dark:bg-gray-700 dark:text-white`}
             placeholder="Enter your password"
           />
+          {errors.password && (
+            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+          )}
         </div>
 
         {/* Remember Me & Forgot Password */}
