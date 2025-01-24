@@ -1,13 +1,18 @@
 import DarkMode from "./DarkMode";
 import Logo from "./Logo";
 import NavLinks from "./NavLinks";
-const Header: React.FC = () => {
+
+interface HeaderProps{
+  changeTheme:()=>void
+}
+
+const Header: React.FC<HeaderProps> = ({changeTheme,isDarkMode}) => {
   return (
     <div className="flex items-center justify-between py-4">
-      <Logo></Logo>
+      <Logo ></Logo>
       <div className=" flex items-center space-x-4">
         <NavLinks></NavLinks>
-        <DarkMode></DarkMode>
+        <DarkMode changeTheme={changeTheme} isDarkMode={isDarkMode}></DarkMode>
       </div>
     </div>
   );

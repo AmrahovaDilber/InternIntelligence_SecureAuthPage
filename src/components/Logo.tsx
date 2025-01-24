@@ -10,7 +10,7 @@ const Logo: React.FC = () => {
           className="object-cover w-full h-full rounded-full"
         />
       </figure>
-      <p className="font-bold text-[22px] text-gray-900 ">
+      <p className="font-bold text-[22px] text-gray-900 dark:text-[#E0E0E0]">
         SecureAuth
       </p>
     </a>
