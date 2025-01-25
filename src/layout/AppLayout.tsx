@@ -6,7 +6,11 @@ interface AppLayoutProps {
 }
 
 const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
-  const [isDarkMode, setIsDarkMode] = useState<boolean>(false);
+
+  const [isDarkMode, setIsDarkMode] = useState<boolean>(() => {
+    const savedMode = localStorage.getItem("isDarkMode");
+    return savedMode ? JSON.parse(savedMode) : false;
+  });
 
   useEffect(() => {
     if (isDarkMode) {
@@ -14,22 +18,32 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     } else {
       document.documentElement.classList.remove("dark");
     }
+
+
+    localStorage.setItem("isDarkMode", JSON.stringify(isDarkMode));
   }, [isDarkMode]);
 
   function changeTheme() {
-    setIsDarkMode((isDarkMode) => !isDarkMode);
+    setIsDarkMode((prevMode) => !prevMode);
   }
+
+  // useEffect(() => {
+  //   const loader = document.getElementById("loader");
+  //   if (loader) {
+  //     loader.classList.add("hidden");
+  //   }
+  // }, []);
+
   return (
     <div className="min-h-screen bg-gray-100 dark:bg-[#121212]">
-      <div className=" w-full mx-auto ">
-        <Header isDarkMode={isDarkMode} changeTheme={changeTheme} />  
-        <main className="flex-1 w-full py-6 max-w-[1200px] mx-auto px-4  sm:px-6 lg:px-8">
+      <div className="w-full mx-auto">
+        <Header isDarkMode={isDarkMode} changeTheme={changeTheme} />
+        <main className="flex-1 w-full py-6 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
           {children}
         </main>
       </div>
     </div>
   );
-  
 };
 
 export default AppLayout;

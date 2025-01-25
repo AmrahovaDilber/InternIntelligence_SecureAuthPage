@@ -48,9 +48,9 @@ export const MainContextProvider = ({ children }: { children: ReactNode }) => {
   }, []);
 
   const initializeUser = (user: User | null) => {
-    if (user) {
+    if (currentUser) {
       setCurrentUser(user);
-      setUserLoggedIn(true);
+      setUserLoggedIn(true)
     } else {
       setCurrentUser(null);
       setUserLoggedIn(false);
