@@ -16,7 +16,8 @@ type LoginFormData = {
 
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
-  const { userLoggedIn, setUserLoggedIn, loginFormData, setLoginFormData } = useMainContext();
+  const { userLoggedIn, setUserLoggedIn, loginFormData, setLoginFormData } =
+    useMainContext();
   const [isSigningIn, setIsSigningIn] = useState(false);
   const [errors, setErrors] = useState<Partial<LoginFormData>>({});
 
@@ -47,7 +48,10 @@ const LoginForm: React.FC = () => {
     if (Object.keys(validationErrors).length === 0 && !isSigningIn) {
       setIsSigningIn(true);
       try {
-        await doSignInWithEmailAndPassword(loginFormData.email, loginFormData.password);
+        await doSignInWithEmailAndPassword(
+          loginFormData.email,
+          loginFormData.password
+        );
         setUserLoggedIn(true);
       } catch (err) {
         console.error(err);
@@ -63,9 +67,9 @@ const LoginForm: React.FC = () => {
       setIsSigningIn(true);
       try {
         await doSignInWithGoogle();
-        notification("Successfuly Logged In")
+        notification("Successfuly Logged In");
         setUserLoggedIn(true);
-     
+
         navigate("/user");
       } catch (err) {
         console.error(err);
@@ -102,12 +106,10 @@ const LoginForm: React.FC = () => {
     try {
       await doPasswordReset(email);
       notification("Password reset email sent successfully. Check your inbox.");
-    } catch (error: any) {
-      const errorMessage = error.message || "Failed to send password reset email.";
-      notification(errorMessage);
-      console.error(error);
+    } catch {
+      notification("Failed to send password reset email.");
     }
-  }
+  };
 
   useEffect(() => {
     if (userLoggedIn) {
@@ -179,15 +181,13 @@ const LoginForm: React.FC = () => {
 
           {/* Remember Me & Forgot Password */}
           <div className="flex-end w-full  mt-3">
-        
             <button
-            type="button"
-            onClick={handleForgotPassword}
-            className="text-sm text-purple-600 dark:text-purple-400 hover:underline flex-end items-end flex"
-          >
-            Forgot Password?
-          </button>
-
+              type="button"
+              onClick={handleForgotPassword}
+              className="text-sm text-purple-600 dark:text-purple-400 hover:underline flex-end items-end flex"
+            >
+              Forgot Password?
+            </button>
           </div>
 
           {/* Login Button */}
@@ -234,10 +234,6 @@ const LoginForm: React.FC = () => {
             </p>
           </div>
         </div>
-
-
-      
-      
       </form>
     </div>
   );

@@ -3,14 +3,19 @@ import { Link, useNavigate } from "react-router-dom";
 import { doCreateUserWithEmailAndPassword } from "../firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
-import { useMainContext } from "../context/MainContext";;
-import { notification } from "../lib/helper"
+import { useMainContext } from "../context/MainContext";
+import { notification } from "../lib/helper";
 
 interface FormDataType {
   name: string;
   email: string;
   password: string;
   checked: boolean;
+  phone?: string;
+  dateOfBirth?: string;
+  gender?: string;
+  address?: string;
+  country?: string;
 }
 
 interface ErrorType {
@@ -18,6 +23,11 @@ interface ErrorType {
   email?: string;
   password?: string;
   checked?: string;
+  phone?: string;
+  dateOfBirth?: string;
+  gender?: string;
+  address?: string;
+  country?: string;
 }
 
 const RegisterForm: React.FC = () => {
@@ -27,8 +37,13 @@ const RegisterForm: React.FC = () => {
     email: "",
     password: "",
     checked: false,
+    phone: "",
+    dateOfBirth: "",
+    gender: "",
+    address: "",
+    country: "",
   });
-  const{setUserInfo}=useMainContext()
+  const { setUserInfo } = useMainContext();
 
   const [errors, setErrors] = useState<ErrorType>({});
   const [isRegistering, setIsRegistering] = useState(false);
@@ -61,6 +76,11 @@ const RegisterForm: React.FC = () => {
       validationErrors.checked = "You must accept the Terms of Service.";
     }
 
+    // Optional validations for new fields
+    if (formData.phone && !/^\+?[1-9]\d{1,14}$/.test(formData.phone)) {
+      validationErrors.phone = "Invalid phone number.";
+    }
+
     return validationErrors;
   };
 
@@ -85,14 +105,22 @@ const RegisterForm: React.FC = () => {
           email: formData.email,
           password: formData.password,
           acceptedTerms: formData.checked,
+          phone: formData.phone,
+          dateOfBirth: formData.dateOfBirth,
+          gender: formData.gender,
+          address: formData.address,
+          country: formData.country,
         });
         setUserInfo({
           name: formData.name,
           email: formData.email,
-          password: formData.password,
-          acceptedTerms: formData.checked,
-        })
-        notification("Succesfully Registered");
+          phone: formData.phone,
+          dateOfBirth: formData.dateOfBirth,
+          gender: formData.gender,
+          address: formData.address,
+          country: formData.country,
+        });
+        notification("Successfully Registered");
         navigate("/login");
       } catch (err) {
         console.error("Error during registration:", err);
@@ -102,8 +130,8 @@ const RegisterForm: React.FC = () => {
     }
   };
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, type, value, checked } = e.target;
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+    const { name, type, value, checked } = e.target as HTMLInputElement;
 
     setFormData((prevFormData) => ({
       ...prevFormData,
@@ -124,13 +152,10 @@ const RegisterForm: React.FC = () => {
       <h2 className="text-3xl font-bold text-gray-800 dark:text-white text-center mb-6">
         Register
       </h2>
-      <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-2 gap-4">
         {/* Name Field */}
         <div>
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2"
-          >
+          <label htmlFor="name" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
             Name
           </label>
           <input
@@ -150,13 +175,10 @@ const RegisterForm: React.FC = () => {
             <p className="text-red-500 text-sm mt-1">{errors.name}</p>
           )}
         </div>
-
+  
         {/* Email Field */}
         <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2"
-          >
+          <label htmlFor="email" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
             Email Address
           </label>
           <input
@@ -176,13 +198,10 @@ const RegisterForm: React.FC = () => {
             <p className="text-red-500 text-sm mt-1">{errors.email}</p>
           )}
         </div>
-
+  
         {/* Password Field */}
         <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2"
-          >
+          <label htmlFor="password" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
             Password
           </label>
           <input
@@ -202,9 +221,94 @@ const RegisterForm: React.FC = () => {
             <p className="text-red-500 text-sm mt-1">{errors.password}</p>
           )}
         </div>
-
+  
+        {/* Phone Field */}
+        <div>
+          <label htmlFor="phone" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
+            Phone Number
+          </label>
+          <input
+            type="tel"
+            id="phone"
+            name="phone"
+            value={formData.phone}
+            onChange={handleInputChange}
+            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 dark:text-white"
+            placeholder="Enter your phone number"
+          />
+          {errors.phone && (
+            <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+          )}
+        </div>
+  
+        {/* Date of Birth Field */}
+        <div>
+          <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
+            Date of Birth
+          </label>
+          <input
+            type="date"
+            id="dateOfBirth"
+            name="dateOfBirth"
+            value={formData.dateOfBirth}
+            onChange={handleInputChange}
+            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 dark:text-white"
+          />
+        </div>
+  
+        {/* Gender Field */}
+        <div>
+          <label htmlFor="gender" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
+            Gender
+          </label>
+          <select
+            id="gender"
+            name="gender"
+            value={formData.gender}
+            onChange={handleInputChange}
+            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 dark:text-white"
+          >
+            <option value="">Select Gender</option>
+            <option value="male">Male</option>
+            <option value="female">Female</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+  
+        {/* Address Field */}
+        <div className="col-span-2">
+          <label htmlFor="address" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
+            Address
+          </label>
+          <input
+            type="text"
+            id="address"
+            name="address"
+            value={formData.address}
+            onChange={handleInputChange}
+            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 dark:text-white"
+            placeholder="Enter your address"
+          />
+        </div>
+  
+        {/* Country Field */}
+        <div className="col-span-2">
+          <label htmlFor="country" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
+            Country
+          </label>
+          <input
+            type="text"
+            id="country"
+            name="country"
+            value={formData.country}
+            onChange={handleInputChange}
+            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 dark:text-white"
+            placeholder="Enter your country"
+          />
+        </div>
+  
         {/* Checkbox */}
-        <div className="flex items-center mt-4">
+        <div className="col-span-2 flex items-center mt-4">
           <input
             type="checkbox"
             name="checked"
@@ -220,22 +324,26 @@ const RegisterForm: React.FC = () => {
           </p>
         </div>
         {errors.checked && (
-          <p className="text-red-500 text-sm mt-1">{errors.checked}</p>
+          <div className="col-span-2">
+            <p className="text-red-500 text-sm mt-1">{errors.checked}</p>
+          </div>
         )}
-
+  
         {/* Submit Button */}
-        <button
-          type="submit"
-          disabled={isRegistering}
-          className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-all"
-        >
-          {isRegistering ? "Registering..." : "Register"}
-        </button>
-
-        <div className="flex justify-center mt-2">
+        <div className="col-span-2">
+          <button
+            type="submit"
+            disabled={isRegistering}
+            className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-all"
+          >
+            {isRegistering ? "Registering..." : "Register"}
+          </button>
+        </div>
+  
+        <div className="col-span-2 flex justify-center mt-2">
           <p className="dark:text-gray-300">Already have an account?</p>
           <Link to="/login">
-            <button className=" ml-1 font-semibold text-purple-600 dark:text-purple-400 hover:underline">
+            <button className="ml-1 font-semibold text-purple-600 dark:text-purple-400 hover:underline">
               Login
             </button>
           </Link>

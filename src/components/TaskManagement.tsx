@@ -52,22 +52,50 @@ const TaskManagement = () => {
   }, [currentUser]);
 
   const addTask = async () => {
-    if (taskInput.trim() && currentUser) {
-      const newTask = {
-        id: Date.now().toString(),
-        text: taskInput,
+    // Trim input and validate
+    const trimmedTaskInput = taskInput.trim();
+    
+    if (!trimmedTaskInput) {
+      toast.error("Task cannot be empty");
+      return;
+    }
+  
+    if (!currentUser) {
+      toast.error("You must be logged in to add tasks");
+      return;
+    }
+  
+    try {
+      const newTask: Omit<TaskProps, 'id'> = {
+        text: trimmedTaskInput,
         completed: false,
         userId: currentUser.uid,
         priority,
         dueDate: new Date().toISOString(),
       };
+  
+
       const docRef = await addDoc(collection(db, "tasks"), newTask);
-      setTasks([...tasks, { ...newTask, id: docRef.id }]);
+  
+      
+      const completeNewTask: TaskProps = {
+        ...newTask,
+        id: docRef.id
+      };
+  
+      
+      setTasks(prevTasks => [...prevTasks, completeNewTask]);
+      
+
       setTaskInput("");
-      toast.success(`Task "${taskInput}" added!`);
+      setPriority("Low");
+
+      toast.success(`Task "${trimmedTaskInput}" added successfully!`);
+    } catch (error) {
+      console.error("Error adding task:", error);
+      toast.error("Failed to add task. Please try again.");
     }
   };
-
   const deleteTask = async (id: string, text: string) => {
     await deleteDoc(doc(db, "tasks", id));
     setTasks(tasks.filter((task) => task.id !== id));

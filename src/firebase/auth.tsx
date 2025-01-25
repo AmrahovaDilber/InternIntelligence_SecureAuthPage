@@ -5,9 +5,12 @@ import {
   GoogleAuthProvider,
   createUserWithEmailAndPassword,
   updatePassword,
+  User, 
 } from "firebase/auth";
 
+
 import { auth } from "./firebase";
+
 
 
 export const doCreateUserWithEmailAndPassword = async (email:string,password:string) => {
@@ -36,7 +39,18 @@ export const doPasswordReset = (email:string) => {
   return sendPasswordResetEmail(auth, email);
 };
 
-export const doPasswordChange = (password:string) => {
-  return updatePassword(auth.currentUser, password);
-};
+export const doPasswordChange = async (password: string): Promise<void> => {
+  const currentUser: User | null = auth.currentUser;
 
+  if (!currentUser) {
+    throw new Error("No user is currently signed in.");
+  }
+
+  try {
+    await updatePassword(currentUser, password);
+    console.log("Password updated successfully.");
+  } catch (error) {
+    console.error("Error updating password:", error);
+    throw error; 
+  }
+};

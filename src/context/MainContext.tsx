@@ -43,20 +43,27 @@ export const MainContextProvider = ({ children }: { children: ReactNode }) => {
   const [userInfo, setUserInfo] = useState({});
 
   useEffect(() => {
-    const unsubscribe = onAuthStateChanged(auth, initializeUser);
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setCurrentUser(user);
+        setUserLoggedIn(true);
+        
+        // Optionally, fetch additional user info if needed
+        const userInfo = {
+          name: user.displayName || '',
+          email: user.email || '',
+        };
+        setUserInfo(userInfo);
+      } else {
+        setCurrentUser(null);
+        setUserLoggedIn(false);
+        setUserInfo({});
+      }
+      setLoading(false);
+    });
+
     return () => unsubscribe();
   }, []);
-
-  const initializeUser = (user: User | null) => {
-    if (currentUser) {
-      setCurrentUser(user);
-      setUserLoggedIn(true)
-    } else {
-      setCurrentUser(null);
-      setUserLoggedIn(false);
-    }
-    setLoading(false);
-  };
 
   const data: MainContextType = {
     currentUser,

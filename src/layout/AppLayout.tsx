@@ -38,7 +38,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     <div className="min-h-screen bg-gray-100 dark:bg-[#121212]">
       <div className="w-full mx-auto">
         <Header isDarkMode={isDarkMode} changeTheme={changeTheme} />
-        <main className="flex-1 w-full py-6 max-w-[1200px] mx-auto px-4 sm:px-6 lg:px-8">
+        <main className="flex-1 w-full py-6 max-w-[1280px] mx-auto px-4 sm:px-6 lg:px-8">
           {children}
         </main>
       </div>
