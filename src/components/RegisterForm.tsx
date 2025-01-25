@@ -1,7 +1,15 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { doCreateUserWithEmailAndPassword } from "../firebase/auth";
 
-interface errorType {
+interface FormDataType {
+  name: string;
+  email: string;
+  password: string;
+  checked: boolean;
+}
+
+interface ErrorType {
   name?: string;
   email?: string;
   password?: string;
@@ -9,35 +17,36 @@ interface errorType {
 }
 
 const RegisterForm: React.FC = () => {
-  const [formData, setFormData] = useState({
+  const navigate=useNavigate()
+  const [formData, setFormData] = useState<FormDataType>({
     name: "",
     email: "",
     password: "",
     checked: false,
   });
 
-  const [errors, setErrors] = useState<errorType>({});
+  const [errors, setErrors] = useState<ErrorType>({});
+  const [isRegistering, setIsRegistering] = useState(false);
 
-  const validateEmail = (email: string) => {
+  const validateEmail = (email: string): boolean => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     return emailRegex.test(email);
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log(formData);
-    const validationErrors: errorType = {};
-    if (!formData.name) {
-      validationErrors.name = "Name is required";
+  const validateForm = (): ErrorType => {
+    const validationErrors: ErrorType = {};
+
+    if (!formData.name.trim()) {
+      validationErrors.name = "Name is required.";
     }
 
-    if (!formData.email) {
+    if (!formData.email.trim()) {
       validationErrors.email = "Email is required.";
     } else if (!validateEmail(formData.email)) {
       validationErrors.email = "Invalid email format.";
     }
 
-    if (!formData.password) {
+    if (!formData.password.trim()) {
       validationErrors.password = "Password is required.";
     } else if (formData.password.length < 6) {
       validationErrors.password = "Password must be at least 6 characters.";
@@ -47,63 +56,77 @@ const RegisterForm: React.FC = () => {
       validationErrors.checked = "You must accept the Terms of Service.";
     }
 
+    return validationErrors;
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const validationErrors = validateForm();
     setErrors(validationErrors);
 
     if (Object.keys(validationErrors).length === 0) {
-      console.log(formData);
+      try {
+        setIsRegistering(true);
+        await doCreateUserWithEmailAndPassword(
+          formData.email,
+          formData.password
+        );
+        navigate('/login')
+      } catch (err) {
+        console.error("Error during registration:", err);
+      } finally {
+        setIsRegistering(false);
+      }
     }
   };
 
-  function handleInputChange(e: React.ChangeEvent<HTMLInputElement>) {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, type, value, checked } = e.target;
-  
-    setFormData((formData) => ({
-      ...formData,
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
       [name]: type === "checkbox" ? checked : value,
     }));
-  
-    setErrors((errors) => ({
-      ...errors,
+
+    setErrors((prevErrors) => ({
+      ...prevErrors,
       [name]: "",
     }));
-  }
-  
+  };
+
   return (
     <form
       onSubmit={handleSubmit}
-      className="h-auto bg-white p-8  w-full mx-auto shadow-xl backdrop-blur-sm dark:bg-[#1E1E1E] bg-gray-100/50 rounded-2xl"
+      className="h-auto bg-white p-8 w-full mx-auto shadow-xl backdrop-blur-sm dark:bg-[#1E1E1E] bg-gray-100/50 rounded-2xl"
     >
-      <h2 className="text-3xl font-bold text-gray-800 dark:text-white  text-center mb-6">
+      <h2 className="text-3xl font-bold text-gray-800 dark:text-white text-center mb-6">
         Register
       </h2>
       <div className="flex flex-col gap-4">
         {/* Name Field */}
         <div>
-          <label
-            htmlFor="name"
-            className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2"
-          >
+          <label htmlFor="name"  className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
             Name
           </label>
           <input
-            type="name"
+            type="text"
             id="name"
             name="name"
             value={formData.name}
             onChange={handleInputChange}
-            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none bg-white dark:bg-gray-700 dark:text-white"
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none ${
+              errors.name
+                ? "border-red-500 dark:border-red-500"
+                : "border-gray-300 dark:border-gray-600"
+            } bg-white dark:bg-gray-700 dark:text-white`}
             placeholder="Enter your name"
           />
-          {errors.name && (
-            <p className="text-red-500 text-sm mt-1">{errors.name}</p>
-          )}
+          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
         </div>
+
         {/* Email Field */}
         <div>
-          <label
-            htmlFor="email"
-            className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2"
-          >
+          <label htmlFor="email" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
             Email Address
           </label>
           <input
@@ -112,7 +135,11 @@ const RegisterForm: React.FC = () => {
             name="email"
             value={formData.email}
             onChange={handleInputChange}
-            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none bg-white dark:bg-gray-700 dark:text-white"
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none ${
+              errors.email
+                ? "border-red-500 dark:border-red-500"
+                : "border-gray-300 dark:border-gray-600"
+            } bg-white dark:bg-gray-700 dark:text-white`}
             placeholder="Enter your email"
           />
           {errors.email && (
@@ -122,10 +149,7 @@ const RegisterForm: React.FC = () => {
 
         {/* Password Field */}
         <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2"
-          >
+          <label htmlFor="password"  className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
             Password
           </label>
           <input
@@ -134,7 +158,11 @@ const RegisterForm: React.FC = () => {
             name="password"
             value={formData.password}
             onChange={handleInputChange}
-            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none bg-white dark:bg-gray-700 dark:text-white"
+            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none ${
+              errors.password
+                ? "border-red-500 dark:border-red-500"
+                : "border-gray-300 dark:border-gray-600"
+            } bg-white dark:bg-gray-700 dark:text-white`}
             placeholder="Enter your password"
           />
           {errors.password && (
@@ -142,6 +170,7 @@ const RegisterForm: React.FC = () => {
           )}
         </div>
 
+        {/* Checkbox */}
         <div className="flex items-center mt-4">
           <input
             type="checkbox"
@@ -150,31 +179,30 @@ const RegisterForm: React.FC = () => {
             checked={formData.checked}
             onChange={handleInputChange}
           />
-          <p className="ml-2 text-gray-800 dark:text-white">
-            I have read and accept the{" "}
-            <a href="#" className="underline text-gray-800 dark:text-white">
+          <p className="ml-2 dark:text-gray-300">
+            I accept the{" "}
+            <a href="#" className="underline">
               Terms of Service & Privacy Policy
             </a>
           </p>
-          {errors.checked && (
-            <p className="text-red-500 text-sm mt-1">{errors.checked}</p>
-          )}
         </div>
+        {errors.checked && (
+          <p className="text-red-500 text-sm mt-1">{errors.checked}</p>
+        )}
 
-        {/* Register Button */}
+        {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-all duration-300"
+          disabled={isRegistering}
+          className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-all"
         >
-          Register
+          {isRegistering ? "Registering..." : "Register"}
         </button>
-        <div className="flex items-center justify-center text-gray-800 dark:text-white  mt-2">
-          <p className="text-gray-800 dark:text-white ">
-            Already have an account?
-          </p>
 
+        <div className="flex justify-center mt-2">
+          <p className="dark:text-gray-300">Already have an account?</p>
           <Link to="/login">
-            <button className="font-semibold text-purple-600 dark:text-purple-400 hover:underline">
+            <button className=" ml-1 font-semibold text-purple-600 dark:text-purple-400 hover:underline">
               Login
             </button>
           </Link>

@@ -2,6 +2,7 @@ import img from "../assets/images/register.png";
 import LoginForm from "./LoginForm";
 
 const Login: React.FC = () => {
+
   return (
     <div className="w-full mt-10 flex flex-col md:flex-row justify-center items-stretch md:justify-between mx-auto   max-w-[1100px]">
       {/* Left Section */}
