@@ -4,6 +4,8 @@ import { AiOutlineCheckCircle } from "react-icons/ai";
 import { db } from "../firebase/firebase";
 import { collection, addDoc, query, where, getDocs, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { useMainContext } from "../context/MainContext";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface TaskProps {
   id: string;
@@ -37,15 +39,33 @@ const TaskManagement = () => {
       const newTask = { id: Date.now().toString(), text: taskInput, completed: false, userId: currentUser.uid };
       const docRef = await addDoc(collection(db, "tasks"), newTask);
       setTasks([...tasks, { ...newTask, id: docRef.id }]);
+      toast.success(`Task "${taskInput}" added successfully!`);
       setTaskInput("");
+    } else {
+      toast.error("Task input cannot be empty!");
     }
   };
 
   const deleteTask = async (id: string) => {
-    await deleteDoc(doc(db, "tasks", id));
-    setTasks(tasks.filter((task) => task.id !== id));
+    const task = tasks.find((task) => task.id === id);
+    if (task) {
+      await deleteDoc(doc(db, "tasks", id));
+      setTasks(tasks.filter((task) => task.id !== id));
+      toast.success(`Task "${task.text}" deleted.`);
+    }
   };
 
+  const editTask = async (id: string, newText: string) => {
+    const task = tasks.find((task) => task.id === id);
+    if (task && newText.trim()) {
+      await updateDoc(doc(db, "tasks", id), { text: newText });
+      setTasks(tasks.map((t) => (t.id === id ? { ...t, text: newText } : t)));
+      toast.success(`Task "${newText}" updated!`);
+    } else {
+      toast.error("Task text cannot be empty!");
+    }
+  }; 
+  
   const toggleTaskCompletion = async (id: string) => {
     const task = tasks.find((task) => task.id === id);
     if (task) {
@@ -113,6 +133,7 @@ const TaskManagement = () => {
           </p>
         )}
       </ul>
+      <ToastContainer />
     </div>
   );
 };

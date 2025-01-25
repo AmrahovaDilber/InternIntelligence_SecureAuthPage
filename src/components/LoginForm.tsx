@@ -3,9 +3,11 @@ import { Link, useNavigate } from "react-router-dom";
 import google from "../assets/images/google.png";
 import { useMainContext } from "../context/MainContext";
 import {
+  doPasswordReset,
   doSignInWithEmailAndPassword,
   doSignInWithGoogle,
 } from "../firebase/auth";
+import { notification } from "../lib/helper";
 
 type LoginFormData = {
   email: string;
@@ -16,7 +18,6 @@ const LoginForm: React.FC = () => {
   const navigate = useNavigate();
   const { userLoggedIn, setUserLoggedIn, loginFormData, setLoginFormData } = useMainContext();
   const [isSigningIn, setIsSigningIn] = useState(false);
-
   const [errors, setErrors] = useState<Partial<LoginFormData>>({});
 
   const validateEmail = (email: string) => {
@@ -47,7 +48,6 @@ const LoginForm: React.FC = () => {
       setIsSigningIn(true);
       try {
         await doSignInWithEmailAndPassword(loginFormData.email, loginFormData.password);
-      
         setUserLoggedIn(true);
       } catch (err) {
         console.error(err);
@@ -63,7 +63,9 @@ const LoginForm: React.FC = () => {
       setIsSigningIn(true);
       try {
         await doSignInWithGoogle();
+        notification("Successfuly Logged In")
         setUserLoggedIn(true);
+     
         navigate("/user");
       } catch (err) {
         console.error(err);
@@ -85,6 +87,27 @@ const LoginForm: React.FC = () => {
       [name]: "",
     }));
   };
+  const handleForgotPassword = async () => {
+    const email = loginFormData.email;
+    if (!email) {
+      notification("Please enter your email address.");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      notification("Please enter a valid email address.");
+      return;
+    }
+
+    try {
+      await doPasswordReset(email);
+      notification("Password reset email sent successfully. Check your inbox.");
+    } catch (error: any) {
+      const errorMessage = error.message || "Failed to send password reset email.";
+      notification(errorMessage);
+      console.error(error);
+    }
+  }
 
   useEffect(() => {
     if (userLoggedIn) {
@@ -155,22 +178,16 @@ const LoginForm: React.FC = () => {
           </div>
 
           {/* Remember Me & Forgot Password */}
-          <div className="flex items-center justify-between mt-3">
-            <label className="flex items-center space-x-2">
-              <input
-                type="checkbox"
-                className="rounded border-gray-300 dark:border-gray-600 text-purple-600 focus:ring-purple-500"
-              />
-              <span className="text-gray-600 dark:text-gray-300">
-                Remember Me
-              </span>
-            </label>
-            <Link
-              to="/forgot-password"
-              className="text-sm text-purple-600 dark:text-purple-400 hover:underline"
-            >
-              Forgot Password?
-            </Link>
+          <div className="flex-end w-full  mt-3">
+        
+            <button
+            type="button"
+            onClick={handleForgotPassword}
+            className="text-sm text-purple-600 dark:text-purple-400 hover:underline flex-end items-end flex"
+          >
+            Forgot Password?
+          </button>
+
           </div>
 
           {/* Login Button */}
@@ -217,6 +234,10 @@ const LoginForm: React.FC = () => {
             </p>
           </div>
         </div>
+
+
+      
+      
       </form>
     </div>
   );

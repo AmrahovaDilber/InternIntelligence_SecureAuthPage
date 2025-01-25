@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useMainContext } from "../context/MainContext";
 import UserContent from "../components/UserContent";
 import TabButton from "../components/TabButton";
+import { Link } from "react-router-dom";
 
 const UserPage = () => {
   const { userLoggedIn } = useMainContext();
@@ -39,12 +40,12 @@ const UserPage = () => {
           <p className="text-2xl text-gray-700 dark:text-gray-300 mb-4">
             You need to log in to access the dashboard.
           </p>
-          <button
+          <Link to="/login"
             className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700 transition"
             onClick={() => console.log("Redirect to login")}
           >
             Log In
-          </button>
+          </Link>
         </div>
       )}
     </div>

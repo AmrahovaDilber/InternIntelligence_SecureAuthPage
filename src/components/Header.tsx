@@ -4,6 +4,7 @@ import Logo from "./Logo";
 import NavLinks from "./NavLinks";
 import { useMainContext } from "../context/MainContext";
 import { doSignOut } from "../firebase/auth";
+import { notification } from "../lib/helper";
 
 interface HeaderProps {
   changeTheme: () => void;
@@ -25,18 +26,18 @@ const Header: React.FC<HeaderProps> = ({ changeTheme, isDarkMode }) => {
         )}
 
         <div className="flex items-center space-x-6">
-  
           {!userLoggedIn && <NavLinks />}
 
-        
           <DarkMode changeTheme={changeTheme} isDarkMode={isDarkMode} />
-
 
           {userLoggedIn && (
             <div className="flex items-center space-x-2">
               <IoPerson className="w-6 h-6 text-gray-700 dark:text-gray-300" />
               <button
-                onClick={() => doSignOut()}
+                onClick={() => {
+                  doSignOut();
+                  notification("You have successfully signed out!");
+                }}
                 className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:underline"
               >
                 Sign out

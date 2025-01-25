@@ -3,7 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import { doCreateUserWithEmailAndPassword } from "../firebase/auth";
 import { doc, setDoc } from "firebase/firestore";
 import { db } from "../firebase/firebase";
-import { useMainContext } from "../context/MainContext";
+import { useMainContext } from "../context/MainContext";;
+import { notification } from "../lib/helper"
 
 interface FormDataType {
   name: string;
@@ -91,7 +92,7 @@ const RegisterForm: React.FC = () => {
           password: formData.password,
           acceptedTerms: formData.checked,
         })
-        alert("Succesfully Registered");
+        notification("Succesfully Registered");
         navigate("/login");
       } catch (err) {
         console.error("Error during registration:", err);
