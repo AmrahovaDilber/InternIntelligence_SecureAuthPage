@@ -31,7 +31,7 @@ const UserPage = () => {
             ))}
           </div>
 
-          <div className="  p-6">
+          <div className="  py-6">
             <UserContent selectedTab={selectedTab} />
           </div>
         </div>

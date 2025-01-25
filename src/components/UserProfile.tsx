@@ -74,10 +74,10 @@ const UserProfile = () => {
       <div className="w-full p-6 bg-white rounded-2xl shadow-md">
         {error && (
           <p className="text-red-500 text-center font-medium mb-4">{error}</p>
-        )}
+        )}3
         {userData ? (
           <div className="rounded-2xl py-6 px-2">
-            <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+            <h1 className="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6 text-center">
               {userData.name}'s Profile
             </h1>
             <div className="flex flex-col sm:flex-row sm:flex-wrap gap-2">

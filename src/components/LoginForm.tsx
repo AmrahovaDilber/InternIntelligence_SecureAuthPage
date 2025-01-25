@@ -122,8 +122,8 @@ const LoginForm: React.FC = () => {
         onSubmit={handleSubmit}
         className="h-auto bg-white p-8 w-full mx-auto shadow-xl backdrop-blur-sm dark:bg-[#1E1E1E] bg-gray-100/50 rounded-2xl"
       >
-        <h2 className="text-3xl font-bold text-gray-800 dark:text-white text-center mb-6">
-          Login to Your Account
+        <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white text-center mb-6">
+          Login 
         </h2>
         <div className="flex flex-col gap-4">
           {/* Email Field */}
