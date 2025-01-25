@@ -70,55 +70,52 @@ const UserProfile = () => {
   }, [fetchUserData]);
 
   return (
-    <div className="flex items-center justify-center">
-      <div className="w-full max-w-xl p-6 bg-white rounded-2xl shadow-md">
+<div className="flex items-center justify-center p-4">
+      <div className="w-full max-w-2xl p-6 bg-white rounded-2xl shadow-md">
         {error && (
           <p className="text-red-500 text-center font-medium mb-4">{error}</p>
         )}
         {userData ? (
-          <div className="max-w-4xl mx-auto  rounded-2xl p-6">
-          <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
-            {userData.name}'s Profile
-          </h1>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="font-medium text-gray-800">Name:</div>
-            <div className="text-gray-600">{userData.name}</div>
-        
-            <div className="font-medium text-gray-800">Email:</div>
-            <div className="text-gray-600">{userData.email}</div>
-        
-            {userData.phone && (
-              <>
-                <div className="font-medium text-gray-800">Phone:</div>
-                <div className="text-gray-600">{userData.phone}</div>
-              </>
-            )}
-        
-            {userData.dateOfBirth && (
-              <>
-                <div className="font-medium text-gray-800">Date of Birth:</div>
-                <div className="text-gray-600">{userData.dateOfBirth}</div>
-              </>
-            )}
-        
-            {userData.gender && (
-              <>
-                <div className="font-medium text-gray-800">Gender:</div>
-                <div className="text-gray-600">{userData.gender}</div>
-              </>
-            )}
-        
-       
-        
-            {userData.country && (
-              <>
-                <div className="font-medium text-gray-800">Country:</div>
-                <div className="text-gray-600">{userData.country}</div>
-              </>
-            )}
+          <div className="rounded-2xl p-6">
+            <h1 className="text-3xl font-bold text-gray-800 mb-6 text-center">
+              {userData.name}'s Profile
+            </h1>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <div className="font-medium text-gray-800">Name:</div>
+              <div className="text-gray-600">{userData.name}</div>
+
+              <div className="font-medium text-gray-800">Email:</div>
+              <div className="text-gray-600">{userData.email}</div>
+
+              {userData.phone && (
+                <>
+                  <div className="font-medium text-gray-800">Phone:</div>
+                  <div className="text-gray-600">{userData.phone}</div>
+                </>
+              )}
+
+              {userData.dateOfBirth && (
+                <>
+                  <div className="font-medium text-gray-800">Date of Birth:</div>
+                  <div className="text-gray-600">{userData.dateOfBirth}</div>
+                </>
+              )}
+
+              {userData.gender && (
+                <>
+                  <div className="font-medium text-gray-800">Gender:</div>
+                  <div className="text-gray-600">{userData.gender}</div>
+                </>
+              )}
+
+              {userData.country && (
+                <>
+                  <div className="font-medium text-gray-800">Country:</div>
+                  <div className="text-gray-600">{userData.country}</div>
+                </>
+              )}
+            </div>
           </div>
-        </div>
-        
         ) : (
           <p className="text-gray-500 text-center">Loading user data...</p>
         )}

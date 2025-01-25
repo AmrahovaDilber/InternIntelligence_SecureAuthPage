@@ -210,11 +210,11 @@ const LoginForm: React.FC = () => {
           </p>
 
           {/* Divider */}
-          <div className="flex items-center justify-center">
+          {/* <div className="flex items-center justify-center">
             <span className="h-[1px] w-full bg-gray-300 dark:bg-gray-600"></span>
             <p className="px-4 text-sm text-gray-500 dark:text-gray-400">OR</p>
             <span className="h-[1px] w-full bg-gray-300 dark:bg-gray-600"></span>
-          </div>
+          </div> */}
 
   
           {/* <div
