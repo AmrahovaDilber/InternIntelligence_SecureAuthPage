@@ -45,7 +45,7 @@ const UserProfile = () => {
           phone: data.phone,
           dateOfBirth: data.dateOfBirth,
           gender: data.gender,
-          address: data.address,
+   
           country: data.country
         });
       } else {
@@ -108,12 +108,7 @@ const UserProfile = () => {
               </>
             )}
         
-            {userData.address && (
-              <>
-                <div className="font-medium text-gray-800">Address:</div>
-                <div className="text-gray-600">{userData.address}</div>
-              </>
-            )}
+       
         
             {userData.country && (
               <>

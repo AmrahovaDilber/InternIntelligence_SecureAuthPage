@@ -108,7 +108,7 @@ const RegisterForm: React.FC = () => {
           phone: formData.phone,
           dateOfBirth: formData.dateOfBirth,
           gender: formData.gender,
-          address: formData.address,
+     
           country: formData.country,
         });
         setUserInfo({
@@ -117,7 +117,7 @@ const RegisterForm: React.FC = () => {
           phone: formData.phone,
           dateOfBirth: formData.dateOfBirth,
           gender: formData.gender,
-          address: formData.address,
+         
           country: formData.country,
         });
         notification("Successfully Registered");
@@ -275,21 +275,7 @@ const RegisterForm: React.FC = () => {
           </select>
         </div>
   
-        {/* Address Field */}
-        <div className="col-span-2">
-          <label htmlFor="address" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
-            Address
-          </label>
-          <input
-            type="text"
-            id="address"
-            name="address"
-            value={formData.address}
-            onChange={handleInputChange}
-            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 dark:text-white"
-            placeholder="Enter your address"
-          />
-        </div>
+      
   
         {/* Country Field */}
         <div className="col-span-2">
@@ -308,7 +294,7 @@ const RegisterForm: React.FC = () => {
         </div>
   
         {/* Checkbox */}
-        <div className="col-span-2 flex items-center mt-4">
+        <div className="col-span-2 flex items-center my-3">
           <input
             type="checkbox"
             name="checked"
