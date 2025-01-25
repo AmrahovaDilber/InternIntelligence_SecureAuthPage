@@ -4,7 +4,7 @@ import UserProfile from "./UserProfile";
 const UserContent: React.FC<{ selectedTab: string }> = ({ selectedTab }) => {
   return (
     <div>
-      {selectedTab === "View Profil" ? (
+      {selectedTab === "View Profile" ? (
         <UserProfile></UserProfile>
       ) : (
         <TaskManagement></TaskManagement>

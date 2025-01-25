@@ -20,7 +20,7 @@ const UserPage = () => {
           </p>
 
           <div className="grid gap-4 sm:grid-cols-2 mb-10">
-            {["View Profil", "Task Management"].map((tab) => (
+            {["View Profile", "Task Management"].map((tab) => (
               <TabButton
                 key={tab}
                 setSelectedTab={setSelectedTab}
