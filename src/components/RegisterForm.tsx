@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { doCreateUserWithEmailAndPassword } from "../firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from "../firebase/firebase";
+import { useMainContext } from "../context/MainContext";
 
 interface FormDataType {
   name: string;
@@ -17,13 +20,14 @@ interface ErrorType {
 }
 
 const RegisterForm: React.FC = () => {
-  const navigate=useNavigate()
+  const navigate = useNavigate();
   const [formData, setFormData] = useState<FormDataType>({
     name: "",
     email: "",
     password: "",
     checked: false,
   });
+  const{setUserInfo}=useMainContext()
 
   const [errors, setErrors] = useState<ErrorType>({});
   const [isRegistering, setIsRegistering] = useState(false);
@@ -67,11 +71,28 @@ const RegisterForm: React.FC = () => {
     if (Object.keys(validationErrors).length === 0) {
       try {
         setIsRegistering(true);
-        await doCreateUserWithEmailAndPassword(
+        const userCredential = await doCreateUserWithEmailAndPassword(
           formData.email,
           formData.password
         );
-        navigate('/login')
+
+        const userId = userCredential.user.uid;
+
+        // Save user data to Firestore
+        await setDoc(doc(db, "users", userId), {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          acceptedTerms: formData.checked,
+        });
+        setUserInfo({
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          acceptedTerms: formData.checked,
+        })
+        alert("Succesfully Registered");
+        navigate("/login");
       } catch (err) {
         console.error("Error during registration:", err);
       } finally {
@@ -105,7 +126,10 @@ const RegisterForm: React.FC = () => {
       <div className="flex flex-col gap-4">
         {/* Name Field */}
         <div>
-          <label htmlFor="name"  className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
+          <label
+            htmlFor="name"
+            className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2"
+          >
             Name
           </label>
           <input
@@ -121,12 +145,17 @@ const RegisterForm: React.FC = () => {
             } bg-white dark:bg-gray-700 dark:text-white`}
             placeholder="Enter your name"
           />
-          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
+          {errors.name && (
+            <p className="text-red-500 text-sm mt-1">{errors.name}</p>
+          )}
         </div>
 
         {/* Email Field */}
         <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
+          <label
+            htmlFor="email"
+            className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2"
+          >
             Email Address
           </label>
           <input
@@ -149,7 +178,10 @@ const RegisterForm: React.FC = () => {
 
         {/* Password Field */}
         <div>
-          <label htmlFor="password"  className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
+          <label
+            htmlFor="password"
+            className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2"
+          >
             Password
           </label>
           <input

@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useMainContext } from "../context/MainContext";
 import UserContent from "../components/UserContent";
+import TabButton from "../components/TabButton";
 
 const UserPage = () => {
-  const { userLoggedIn, user } = useMainContext();
+  const { userLoggedIn,  } = useMainContext();
   const [selectedTab, setSelectedTab] = useState<string>("");
 
   return (
@@ -14,19 +15,15 @@ const UserPage = () => {
             Here’s what you can do next:
           </p>
           <div className="mt-4 mb-10 grid gap-4 sm:grid-cols-2">
-            <button
-              onClick={() => setSelectedTab("View Profile")}
-              className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-            >
-              View Profile
-            </button>
-
-            <button
-              onClick={() => setSelectedTab("Task Management")}
-              className="bg-purple-500 text-white px-4 py-2 rounded-lg"
-            >
-              Task Management
-            </button>
+            {["View Profil", "Task Management"].map((tab) => (
+              <TabButton
+                key={tab}
+                setSelectedTab={setSelectedTab}
+                isActive={selectedTab === tab}
+              >
+                {tab}
+              </TabButton>
+            ))}
           </div>
           <UserContent selectedTab={selectedTab}></UserContent>
         </div>

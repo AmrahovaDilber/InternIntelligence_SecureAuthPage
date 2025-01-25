@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import google from "../assets/images/google.png";
 import { useMainContext } from "../context/MainContext";
@@ -7,19 +7,17 @@ import {
   doSignInWithGoogle,
 } from "../firebase/auth";
 
+type LoginFormData = {
+  email: string;
+  password: string;
+};
+
 const LoginForm: React.FC = () => {
   const navigate = useNavigate();
-  const { userLoggedIn } = useMainContext();
+  const { userLoggedIn, setUserLoggedIn, loginFormData, setLoginFormData } = useMainContext();
   const [isSigningIn, setIsSigningIn] = useState(false);
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
 
-  const [errors, setErrors] = useState({
-    email: "",
-    password: "",
-  });
+  const [errors, setErrors] = useState<Partial<LoginFormData>>({});
 
   const validateEmail = (email: string) => {
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -29,35 +27,33 @@ const LoginForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!isSigningIn) {
-      setIsSigningIn(true);
-      try {
-        await doSignInWithEmailAndPassword(formData.email, formData.password);
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setIsSigningIn(false);
-      }
-    }
+    const validationErrors: Partial<LoginFormData> = {};
 
-    const validationErrors: { email?: string; password?: string } = {};
-
-    if (!formData.email) {
+    if (!loginFormData.email) {
       validationErrors.email = "Email is required.";
-    } else if (!validateEmail(formData.email)) {
+    } else if (!validateEmail(loginFormData.email)) {
       validationErrors.email = "Invalid email format.";
     }
 
-    if (!formData.password) {
+    if (!loginFormData.password) {
       validationErrors.password = "Password is required.";
-    } else if (formData.password.length < 6) {
+    } else if (loginFormData.password.length < 6) {
       validationErrors.password = "Password must be at least 6 characters.";
     }
 
     setErrors(validationErrors);
 
-    if (Object.keys(validationErrors).length === 0) {
-      console.log(formData);
+    if (Object.keys(validationErrors).length === 0 && !isSigningIn) {
+      setIsSigningIn(true);
+      try {
+        await doSignInWithEmailAndPassword(loginFormData.email, loginFormData.password);
+      
+        setUserLoggedIn(true);
+      } catch (err) {
+        console.error(err);
+      } finally {
+        setIsSigningIn(false);
+      }
     }
   };
 
@@ -67,6 +63,7 @@ const LoginForm: React.FC = () => {
       setIsSigningIn(true);
       try {
         await doSignInWithGoogle();
+        setUserLoggedIn(true);
         navigate("/user");
       } catch (err) {
         console.error(err);
@@ -78,22 +75,22 @@ const LoginForm: React.FC = () => {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-
-    setFormData((formData) => ({
-      ...formData,
+    setLoginFormData((prev) => ({
+      ...prev,
       [name]: value,
     }));
 
-    setErrors((errors) => ({
-      ...errors,
+    setErrors((prev) => ({
+      ...prev,
       [name]: "",
     }));
   };
 
-  if (userLoggedIn) {
-    navigate("/user");
-    return null;
-  }
+  useEffect(() => {
+    if (userLoggedIn) {
+      navigate("/user");
+    }
+  }, [userLoggedIn, navigate]);
 
   return (
     <div>
@@ -117,7 +114,7 @@ const LoginForm: React.FC = () => {
               type="email"
               id="email"
               name="email"
-              value={formData.email}
+              value={loginFormData.email}
               onChange={handleInputChange}
               className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none ${
                 errors.email
@@ -143,7 +140,7 @@ const LoginForm: React.FC = () => {
               type="password"
               id="password"
               name="password"
-              value={formData.password}
+              value={loginFormData.password}
               onChange={handleInputChange}
               className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none ${
                 errors.password
