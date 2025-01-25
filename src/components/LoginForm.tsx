@@ -1,11 +1,10 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import google from "../assets/images/google.png";
 import { useMainContext } from "../context/MainContext";
 import {
   doPasswordReset,
   doSignInWithEmailAndPassword,
-  doSignInWithGoogle,
+  // doSignInWithGoogle,
 } from "../firebase/auth";
 import { notification } from "../lib/helper";
 
@@ -61,23 +60,23 @@ const LoginForm: React.FC = () => {
     }
   };
 
-  const onGoogleSignIn = async (e: React.MouseEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    if (!isSigningIn) {
-      setIsSigningIn(true);
-      try {
-        await doSignInWithGoogle();
-        notification("Successfuly Logged In");
-        setUserLoggedIn(true);
+  // const onGoogleSignIn = async (e: React.MouseEvent<HTMLDivElement>) => {
+  //   e.preventDefault();
+  //   if (!isSigningIn) {
+  //     setIsSigningIn(true);
+  //     try {
+  //       await doSignInWithGoogle();
+  //       notification("Successfuly Logged In");
+  //       setUserLoggedIn(true);
 
-        navigate("/user");
-      } catch (err) {
-        console.error(err);
-      } finally {
-        setIsSigningIn(false);
-      }
-    }
-  };
+  //       navigate("/user");
+  //     } catch (err) {
+  //       console.error(err);
+  //     } finally {
+  //       setIsSigningIn(false);
+  //     }
+  //   }
+  // };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -217,8 +216,8 @@ const LoginForm: React.FC = () => {
             <span className="h-[1px] w-full bg-gray-300 dark:bg-gray-600"></span>
           </div>
 
-          {/* Google Login */}
-          <div
+  
+          {/* <div
             className="flex items-center justify-center border border-gray-300 dark:border-gray-600 p-3 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-all cursor-pointer"
             onClick={onGoogleSignIn}
           >
@@ -232,7 +231,7 @@ const LoginForm: React.FC = () => {
             <p className="text-gray-700 dark:text-gray-300 font-medium">
               Continue with Google
             </p>
-          </div>
+          </div> */}
         </div>
       </form>
     </div>

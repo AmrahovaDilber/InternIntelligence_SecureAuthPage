@@ -146,196 +146,194 @@ const RegisterForm: React.FC = () => {
 
   return (
     <form
-      onSubmit={handleSubmit}
-      className="h-auto bg-white p-8 w-full mx-auto shadow-xl backdrop-blur-sm dark:bg-[#1E1E1E] bg-gray-100/50 rounded-2xl"
-    >
-      <h2 className="text-3xl font-bold text-gray-800 dark:text-white text-center mb-6">
-        Register
-      </h2>
-      <div className="grid grid-cols-2 gap-4">
-        {/* Name Field */}
-        <div>
-          <label htmlFor="name" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
-            Name
-          </label>
-          <input
-            type="text"
-            id="name"
-            name="name"
-            value={formData.name}
-            onChange={handleInputChange}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none ${
-              errors.name
-                ? "border-red-500 dark:border-red-500"
-                : "border-gray-300 dark:border-gray-600"
-            } bg-white dark:bg-gray-700 dark:text-white`}
-            placeholder="Enter your name"
-          />
-          {errors.name && (
-            <p className="text-red-500 text-sm mt-1">{errors.name}</p>
-          )}
-        </div>
-  
-        {/* Email Field */}
-        <div>
-          <label htmlFor="email" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
-            Email Address
-          </label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            value={formData.email}
-            onChange={handleInputChange}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none ${
-              errors.email
-                ? "border-red-500 dark:border-red-500"
-                : "border-gray-300 dark:border-gray-600"
-            } bg-white dark:bg-gray-700 dark:text-white`}
-            placeholder="Enter your email"
-          />
-          {errors.email && (
-            <p className="text-red-500 text-sm mt-1">{errors.email}</p>
-          )}
-        </div>
-  
-        {/* Password Field */}
-        <div>
-          <label htmlFor="password" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
-            Password
-          </label>
-          <input
-            type="password"
-            id="password"
-            name="password"
-            value={formData.password}
-            onChange={handleInputChange}
-            className={`w-full px-4 py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none ${
-              errors.password
-                ? "border-red-500 dark:border-red-500"
-                : "border-gray-300 dark:border-gray-600"
-            } bg-white dark:bg-gray-700 dark:text-white`}
-            placeholder="Enter your password"
-          />
-          {errors.password && (
-            <p className="text-red-500 text-sm mt-1">{errors.password}</p>
-          )}
-        </div>
-  
-        {/* Phone Field */}
-        <div>
-          <label htmlFor="phone" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
-            Phone Number
-          </label>
-          <input
-            type="tel"
-            id="phone"
-            name="phone"
-            value={formData.phone}
-            onChange={handleInputChange}
-            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 dark:text-white"
-            placeholder="Enter your phone number"
-          />
-          {errors.phone && (
-            <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
-          )}
-        </div>
-  
-        {/* Date of Birth Field */}
-        <div>
-          <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
-            Date of Birth
-          </label>
-          <input
-            type="date"
-            id="dateOfBirth"
-            name="dateOfBirth"
-            value={formData.dateOfBirth}
-            onChange={handleInputChange}
-            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 dark:text-white"
-          />
-        </div>
-  
-        {/* Gender Field */}
-        <div>
-          <label htmlFor="gender" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
-            Gender
-          </label>
-          <select
-            id="gender"
-            name="gender"
-            value={formData.gender}
-            onChange={handleInputChange}
-            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 dark:text-white"
-          >
-            <option value="">Select Gender</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-  
-      
-  
-        {/* Country Field */}
-        <div className="col-span-2">
-          <label htmlFor="country" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
-            Country
-          </label>
-          <input
-            type="text"
-            id="country"
-            name="country"
-            value={formData.country}
-            onChange={handleInputChange}
-            className="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 dark:text-white"
-            placeholder="Enter your country"
-          />
-        </div>
-  
-        {/* Checkbox */}
-        <div className="col-span-2 flex items-center my-3">
-          <input
-            type="checkbox"
-            name="checked"
-            className="w-5 h-5"
-            checked={formData.checked}
-            onChange={handleInputChange}
-          />
-          <p className="ml-2 dark:text-gray-300">
-            I accept the{" "}
-            <a href="#" className="underline">
-              Terms of Service & Privacy Policy
-            </a>
-          </p>
-        </div>
-        {errors.checked && (
-          <div className="col-span-2">
-            <p className="text-red-500 text-sm mt-1">{errors.checked}</p>
-          </div>
+    onSubmit={handleSubmit}
+    className="w-full max-w-2xl mx-auto p-6 sm:p-8 bg-white dark:bg-[#1E1E1E] shadow-xl rounded-2xl"
+  >
+    <h2 className="text-2xl sm:text-3xl font-bold text-gray-800 dark:text-white text-center mb-6">
+      Register
+    </h2>
+    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      {/* Name Field */}
+      <div>
+        <label htmlFor="name" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
+          Name
+        </label>
+        <input
+          type="text"
+          id="name"
+          name="name"
+          value={formData.name}
+          onChange={handleInputChange}
+          className={`w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none ${
+            errors.name
+              ? "border-red-500 dark:border-red-500"
+              : "border-gray-300 dark:border-gray-600"
+          } bg-white dark:bg-gray-700 dark:text-white`}
+          placeholder="Enter your name"
+        />
+        {errors.name && (
+          <p className="text-red-500 text-sm mt-1">{errors.name}</p>
         )}
-  
-        {/* Submit Button */}
-        <div className="col-span-2">
-          <button
-            type="submit"
-            disabled={isRegistering}
-            className="w-full bg-purple-600 text-white py-3 rounded-lg hover:bg-purple-700 transition-all"
-          >
-            {isRegistering ? "Registering..." : "Register"}
-          </button>
-        </div>
-  
-        <div className="col-span-2 flex justify-center mt-2">
-          <p className="dark:text-gray-300">Already have an account?</p>
-          <Link to="/login">
-            <button className="ml-1 font-semibold text-purple-600 dark:text-purple-400 hover:underline">
-              Login
-            </button>
-          </Link>
-        </div>
       </div>
-    </form>
+
+      {/* Email Field */}
+      <div>
+        <label htmlFor="email" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
+          Email Address
+        </label>
+        <input
+          type="email"
+          id="email"
+          name="email"
+          value={formData.email}
+          onChange={handleInputChange}
+          className={`w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none ${
+            errors.email
+              ? "border-red-500 dark:border-red-500"
+              : "border-gray-300 dark:border-gray-600"
+          } bg-white dark:bg-gray-700 dark:text-white`}
+          placeholder="Enter your email"
+        />
+        {errors.email && (
+          <p className="text-red-500 text-sm mt-1">{errors.email}</p>
+        )}
+      </div>
+
+      {/* Password Field */}
+      <div>
+        <label htmlFor="password" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
+          Password
+        </label>
+        <input
+          type="password"
+          id="password"
+          name="password"
+          value={formData.password}
+          onChange={handleInputChange}
+          className={`w-full px-3 py-2 sm:px-4 sm:py-3 border rounded-lg focus:ring-2 focus:ring-purple-500 focus:outline-none ${
+            errors.password
+              ? "border-red-500 dark:border-red-500"
+              : "border-gray-300 dark:border-gray-600"
+          } bg-white dark:bg-gray-700 dark:text-white`}
+          placeholder="Enter your password"
+        />
+        {errors.password && (
+          <p className="text-red-500 text-sm mt-1">{errors.password}</p>
+        )}
+      </div>
+
+      {/* Phone Field */}
+      <div>
+        <label htmlFor="phone" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
+          Phone Number
+        </label>
+        <input
+          type="tel"
+          id="phone"
+          name="phone"
+          value={formData.phone}
+          onChange={handleInputChange}
+          className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 dark:text-white"
+          placeholder="Enter your phone number"
+        />
+        {errors.phone && (
+          <p className="text-red-500 text-sm mt-1">{errors.phone}</p>
+        )}
+      </div>
+
+      {/* Date of Birth Field */}
+      <div>
+        <label htmlFor="dateOfBirth" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
+          Date of Birth
+        </label>
+        <input
+          type="date"
+          id="dateOfBirth"
+          name="dateOfBirth"
+          value={formData.dateOfBirth}
+          onChange={handleInputChange}
+          className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 dark:text-white"
+        />
+      </div>
+
+      {/* Gender Field */}
+      <div>
+        <label htmlFor="gender" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
+          Gender
+        </label>
+        <select
+          id="gender"
+          name="gender"
+          value={formData.gender}
+          onChange={handleInputChange}
+          className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 dark:text-white"
+        >
+          <option value="">Select Gender</option>
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+          <option value="other">Other</option>
+        </select>
+      </div>
+
+      {/* Country Field */}
+      <div className="sm:col-span-2">
+        <label htmlFor="country" className="block text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">
+          Country
+        </label>
+        <input
+          type="text"
+          id="country"
+          name="country"
+          value={formData.country}
+          onChange={handleInputChange}
+          className="w-full px-3 py-2 sm:px-4 sm:py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 dark:text-white"
+          placeholder="Enter your country"
+        />
+      </div>
+
+      {/* Checkbox */}
+      <div className="sm:col-span-2 flex items-center my-3">
+        <input
+          type="checkbox"
+          name="checked"
+          className="w-4 h-4 sm:w-5 sm:h-5"
+          checked={formData.checked}
+          onChange={handleInputChange}
+        />
+        <p className="ml-2 text-sm sm:text-base dark:text-gray-300">
+          I accept the{" "}
+          <a href="#" className="underline">
+            Terms of Service & Privacy Policy
+          </a>
+        </p>
+      </div>
+      {errors.checked && (
+        <div className="sm:col-span-2">
+          <p className="text-red-500 text-sm mt-1">{errors.checked}</p>
+        </div>
+      )}
+
+      {/* Submit Button */}
+      <div className="sm:col-span-2">
+        <button
+          type="submit"
+          disabled={isRegistering}
+          className="w-full bg-purple-600 text-white py-2 sm:py-3 rounded-lg hover:bg-purple-700 transition-all"
+        >
+          {isRegistering ? "Registering..." : "Register"}
+        </button>
+      </div>
+
+      <div className="sm:col-span-2 flex justify-center mt-2 text-sm sm:text-base">
+        <p className="dark:text-gray-300">Already have an account?</p>
+        <Link to="/login">
+          <button className="ml-1 font-semibold text-purple-600 dark:text-purple-400 hover:underline">
+            Login
+          </button>
+        </Link>
+      </div>
+    </div>
+  </form>
   );
 };
 
