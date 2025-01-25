@@ -12,24 +12,40 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ changeTheme, isDarkMode }) => {
   const { userLoggedIn } = useMainContext();
+
   return (
-    <div className="flex items-center justify-between py-4">
-      {userLoggedIn ? <p className="text-2xl font-bold dark:text-gray-300">Welcome User!</p> : (
-        <Logo></Logo>
-      )}
-      
-      <div className=" flex items-center space-x-4">
-        {!userLoggedIn && (     <NavLinks></NavLinks>)}
-   
-        <DarkMode changeTheme={changeTheme} isDarkMode={isDarkMode}></DarkMode>
-        {userLoggedIn && (
-          <div>
-            <IoPerson className="w-[26px] h-[26px] dark:text-[#FAFAFA]" />
-            <button onClick={() => doSignOut()}>Sign out</button>
-          </div>
+    <header className="  bg-white dark:bg-[#1E1E1E] shadow-md">
+      <div className="max-w-[1200px] mx-auto py-4 px-4 sm:px-6 lg:px-8 flex items-center justify-between">
+        {userLoggedIn ? (
+          <p className="text-xl font-semibold text-gray-800 dark:text-gray-300">
+            Welcome!
+          </p>
+        ) : (
+          <Logo />
         )}
+
+        <div className="flex items-center space-x-6">
+  
+          {!userLoggedIn && <NavLinks />}
+
+        
+          <DarkMode changeTheme={changeTheme} isDarkMode={isDarkMode} />
+
+
+          {userLoggedIn && (
+            <div className="flex items-center space-x-2">
+              <IoPerson className="w-6 h-6 text-gray-700 dark:text-gray-300" />
+              <button
+                onClick={() => doSignOut()}
+                className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:underline"
+              >
+                Sign out
+              </button>
+            </div>
+          )}
+        </div>
       </div>
-    </div>
+    </header>
   );
 };
 

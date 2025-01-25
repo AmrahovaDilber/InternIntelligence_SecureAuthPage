@@ -9,7 +9,7 @@ const TabButton: React.FC<TabsProps> = ({setSelectedTab,children,isActive}) => {
     <button
       onClick={() => setSelectedTab(children)}
       className={`px-4 py-2 rounded-lg ${
-        isActive ? "bg-blue-600 text-white" : "bg-gray-200 text-gray-700"
+        isActive ? "bg-violet-600 text-white" : "bg-gray-200 text-gray-700"
       }`}
     >
       {children}

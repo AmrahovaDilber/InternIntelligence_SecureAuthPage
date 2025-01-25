@@ -18,14 +18,16 @@ type MainContextType = {
   userLoggedIn: boolean;
   setUserLoggedIn: (loggedIn: boolean) => void;
   loginFormData: LoginFormData;
-  setLoginFormData: (data: LoginFormData | ((prev: LoginFormData) => LoginFormData)) => void;
+  setLoginFormData: (
+    data: LoginFormData | ((prev: LoginFormData) => LoginFormData)
+  ) => void;
   userInfo: {
     name?: string;
     email?: string;
     password?: string;
     checked?: string;
   };
-  setUserInfo:(userInfo:object)=>void
+  setUserInfo: (userInfo: object) => void;
 };
 
 const MainContext = createContext<MainContextType | null>(null);
@@ -38,8 +40,7 @@ export const MainContextProvider = ({ children }: { children: ReactNode }) => {
     email: "",
     password: "",
   });
-const[userInfo,setUserInfo]=useState({})
-
+  const [userInfo, setUserInfo] = useState({});
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, initializeUser);
@@ -63,10 +64,15 @@ const[userInfo,setUserInfo]=useState({})
     setUserLoggedIn,
     loginFormData,
     setLoginFormData,
-    userInfo,setUserInfo
+    userInfo,
+    setUserInfo,
   };
 
-  return <MainContext.Provider value={data}>{!loading && children}</MainContext.Provider>;
+  return (
+    <MainContext.Provider value={data}>
+      {!loading && children}
+    </MainContext.Provider>
+  );
 };
 
 export const useMainContext = () => {

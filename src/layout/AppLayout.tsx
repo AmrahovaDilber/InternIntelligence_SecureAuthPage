@@ -20,13 +20,16 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     setIsDarkMode((isDarkMode) => !isDarkMode);
   }
   return (
-    <div className="bg-gray-100 dark:bg-[#121212] w-full h-[100vh]">
-      <div className="max-w-[1200px] w-full mx-auto px-6 lg:px-0">
-        <Header isDarkMode={isDarkMode} changeTheme={changeTheme}></Header>
-        {children}
+    <div className="min-h-screen bg-gray-100 dark:bg-[#121212]">
+      <div className=" w-full mx-auto ">
+        <Header isDarkMode={isDarkMode} changeTheme={changeTheme} />  
+        <main className="flex-1 w-full py-6 max-w-[1200px] mx-auto px-4  sm:px-6 lg:px-8">
+          {children}
+        </main>
       </div>
     </div>
   );
+  
 };
 
 export default AppLayout;

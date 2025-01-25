@@ -5,7 +5,7 @@ import TabButton from "../components/TabButton";
 
 const UserPage = () => {
   const { userLoggedIn,  } = useMainContext();
-  const [selectedTab, setSelectedTab] = useState<string>("");
+  const [selectedTab, setSelectedTab] = useState<string>("View Profil");
 
   return (
     <div className="py-6">

@@ -3,7 +3,7 @@ import RegisterForm from "./RegisterForm";
 
 const Register: React.FC = () => {
   return (
-    <div className="w-full mt-10 flex flex-col md:flex-row justify-center items-stretch md:justify-between mx-auto   max-w-[1100px] ">
+    <div className="w-full my-6 flex flex-col md:flex-row justify-center items-stretch md:justify-between mx-auto   max-w-[1100px] ">
       {/* Left Section */}
       <div className="w-full md:w-1/2 lg:w-1/2 flex flex-col justify-center items-center bg-gradient-to-br from-purple-400 via-blue-500 to-cyan-300 relative shadow-lg overflow-hidden rounded-xl">
         <div className="relative flex items-center justify-center w-full h-full">
